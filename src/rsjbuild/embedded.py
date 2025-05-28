@@ -114,7 +114,7 @@ def createEmbedded(targetPath, exeName="main", buildPath=None, createDirs=[], co
         system(f"uv pip install --upgrade --no-deps --target {str(targetPath)} -r build/requirements.txt")
     else:
         os.environ["VIRTUAL_ENV"] = str(targetPath)
-        system("uv pip install sync --upgrade --no-deps -r build/requirements.txt")
+        system("uv pip install --upgrade --no-deps -r build/requirements.txt")
         del os.environ["VIRTUAL_ENV"]
 
     doCopyFiles(targetPath, pathlib.Path("."), createDirs=createDirs, copyFiles=copyFiles, copyTrees=copyTrees)
