@@ -271,4 +271,4 @@ def build(parms, config):
                              keytoolConfigPath=basePath / "keytool.json")
 
 
-        upload(config.uploads, version)
+        upload(config.upload, version)
