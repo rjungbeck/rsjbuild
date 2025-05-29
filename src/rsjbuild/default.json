@@ -1,0 +1,64 @@
+{
+  "exeName": "main",
+  "mainModule": "main",
+  "sourcePath":  "source",
+  "withTkInter": false,
+
+  "environ": {
+    "linux": {},
+    "win32": {}
+    },
+
+  "embedData": {},
+
+  "compile": {
+    },
+
+  "npm": [],
+  "require": {},
+  "gzip": [],
+
+  "createDirs": [],
+  "copyFiles": [],
+  "copyTrees": [],
+  "ignoreFiles": [],
+  "deleteFiles": ["python.exe", "pythonw.exe"],
+  "installers": {},
+
+  "lateCopy": {
+    "copyFiles": [],
+    "copyTrees": []
+    },
+
+  "zips": {},
+  "unzip": [],
+  "innoSetupPath": "c:\\Program Files (x86)\\Inno Setup 6\\iscc.exe",
+  "signTool": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\x64\\signtool.exe",
+  "signTitle": "RSJ Build generated",
+  "privateKeyPath": null,
+  "privateKeyPassword": null,
+  "timestampUrl": "http://timestamp.comodoca.com/authenticode",
+
+  "uploadHost": null,
+  "uploadUser": null,
+  "uploadTarget": null,
+  "uploadTargetDoc": null,
+  "additionalUploads": [],
+
+  "downloadUrl": null,
+  "installArgs": ["/SUPRESSMSGBOXES", "/SILENT", "/CLOSEAPPLICATIONS", "/NORESTART", "/LOG=data/logs/install.log"],
+  "updateInterval": 86400,
+
+
+  "compModules": ["_distutils_hack" ,"addict", "anyio", "argon2", "async_timeout","attr", "attrs", "autobahn" ,"Automat",
+                  "backcall", "bleach", "blume", "boltons", "bs4", "chardet", "charset_normalizer", "cffi",
+                  "click", "colorama", "constantly", "cvxpy", "defusedxml", "ecos", "ecdsa", "et_xmlfile", "face",
+                  "fastjsonschema", "geoip2", "glom", "h11", "h2", "hpack", "httpcore", "httpx", "hyperframe",
+                  "hyperlink","idna", "incremental", "jinja2", "jmespath", "json5", "jwt", "lml", "markupsafe", "maxminddb",
+                  "openpyxl", "packaging", "paho", "pkg_resources", "pyasn1", "pycparser", "pyexcel_odsr", "pyexcel_io", "pygments",
+                  "pyparsing", "PyPDF2", "pypfopt", "pyrsistent", "PySimpleGUI", "pystrich", "pyximport", "qrcode",
+                  "requests","RestrictedPython", "rfc3161ng", "rfc3986", "scs", "seaborn", "sniffio", "soupsive",
+                  "tkinter", "twisted", "txaio", "urllib3", "web2app2_extras","wcwidth","webencodings", "webob", "xlrd",
+                  "xlutils","xlwt" ,"xlsxwriter"
+                ]
+  }

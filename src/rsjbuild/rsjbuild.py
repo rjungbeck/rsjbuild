@@ -1,5 +1,5 @@
 import argparse
-
+import os.path
 import logging
 import pathlib
 import json
@@ -19,7 +19,7 @@ def main():
     parser.add_argument("--version", action="version", version=f"%(prog)s  {rsjbuildVersion}", help="Display version")
     parser.add_argument("--config", type=pathlib.Path, default="build.json", help="Configuration file")
 
-    subparsers = parser.add_subparsers(title="Commands", dest="command")
+    subparsers = parser.add_subparsers(title="Commands", dest="command", default="version")
 
     initParser = subparsers.add_parser("init", help="Initialize build directory")
     initParser.set_defaults(func=doInit)
@@ -50,11 +50,44 @@ def main():
     keytoolParser.add_argument("output", type=pathlib.Path, help="Output file")
     keytoolParser.set_defaults(func=doKeytool)
 
-    parms = parser.parse_args()
+    versionParser = subparsers.add_parser("version", help="Display version")
+    versionParser.set_defaults(func=doVersion)
 
-    config = json.loads(parms.config.read_text())
+    parms = parser.parse_args()
+    userConfigText = parms.config.read_text()
+    userConfigText = os.path.expandvars(userConfigText)
+    userConfig = json.loads(userConfigText)
+
+    rsjbuildPath = pathlib.Path(__file__).parent.resolve()
+    defaultPath = rsjbuildPath / "default.json"
+
+    defaultConfigText = defaultPath.read_text()
+    defaultConfigText = os.path.expandvars(defaultConfigText)
+    defaultConfig = json.loads(defaultConfigText)
+
+    config = merge(userConfig, defaultConfig)
 
     parms.func(parms, config)
+
+
+def merge(source, destination):
+    """
+    run me with nosetests --with-doctest file.py
+
+    >>> a = { 'first' : { 'all_rows' : { 'pass' : 'dog', 'number' : '1' } } }
+    >>> b = { 'first' : { 'all_rows' : { 'fail' : 'cat', 'number' : '5' } } }
+    >>> merge(b, a) == { 'first' : { 'all_rows' : { 'pass' : 'dog', 'fail' : 'cat', 'number' : '5' } } }
+    True
+    """
+    for key, value in source.items():
+        if isinstance(value, dict):
+            # get node or create one
+            node = destination.setdefault(key, {})
+            merge(value, node)
+        else:
+            destination[key] = value
+
+    return destination
 
 def doInit(parms, config):
     from .createenv import createenv
@@ -69,6 +102,9 @@ def doKeytool(parms, config):
 
     from .keytool import keytool
     keytool(parms, config)
+
+def doVersion(parms, config):
+    print(rsjbuildVersion)
 
 
 if __name__ == "__main__":

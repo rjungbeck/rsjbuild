@@ -30,4 +30,4 @@ builtins = ["_"]
 lint.ignore = ["E402"]
 
 [tool.setuptools.package-data]
-rsjbuild = ["*.pyx", "*.h"]
+rsjbuild = ["*.pyx", "*.h", "*.json"]
