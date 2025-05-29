@@ -261,13 +261,6 @@ def build(parms, config):
 
     if parms.upload:
 
-        upload(config.uploadHost,
-               config.uploadUser,
-               version,
-               config.mainModule,
-               config.uploadTarget,
-               config.additionalUploads)
-
         if parms.publish:
             installerPath = pathlib.Path("output") / f"{config.exeName}Inst.exe"
 
@@ -276,3 +269,6 @@ def build(parms, config):
                              installArgs=config.installArgs,
                              updateInterval=config.updateInterval,
                              keytoolConfigPath=basePath / "keytool.json")
+
+
+        upload(config.uploads, version)

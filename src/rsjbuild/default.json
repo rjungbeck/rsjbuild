@@ -39,6 +39,8 @@
   "privateKeyPassword": null,
   "timestampUrl": "http://timestamp.comodoca.com/authenticode",
 
+  "upload": {},
+
   "uploadHost": null,
   "uploadUser": null,
   "uploadTarget": null,

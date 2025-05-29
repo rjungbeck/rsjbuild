@@ -19,7 +19,7 @@ def main():
     parser.add_argument("--version", action="version", version=f"%(prog)s  {rsjbuildVersion}", help="Display version")
     parser.add_argument("--config", type=pathlib.Path, default="build.json", help="Configuration file")
 
-    subparsers = parser.add_subparsers(title="Commands", dest="command", default="version")
+    subparsers = parser.add_subparsers(title="Commands", dest="command")
 
     initParser = subparsers.add_parser("init", help="Initialize build directory")
     initParser.set_defaults(func=doInit)
