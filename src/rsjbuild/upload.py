@@ -21,7 +21,7 @@ def upload(uploads, version):
         (user, host) = hostUrl.split("@", 1)
 
         with (fabric.Connection(host, user=user) as conn):
-            for sourcePath in pathlib.Path(".").glob("*", recursive=True):
+            for sourcePath in pathlib.Path(".").glob(source):
                 if sourcePath.is_file():
                     target = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name)
                     conn.put(str(sourcePath), target)
