@@ -4,9 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from utils import system
-
-import fabric
+from .utils import system
 
 def rename(renames, version):
     for target, source in renames.items:
