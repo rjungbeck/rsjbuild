@@ -25,7 +25,7 @@ def upload(uploads, version):
 
             if sourcePath.is_file():
                 target = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name)
-                system(f"scp {str(sourcePath)} {target}")
+                system(f"scp -o StrictHostKeyChecking=no {str(sourcePath)} {target}")
             else:
                 target = target.format(version=version)
-                system(f"scp -r {str(sourcePath)} {target}")
+                system(f"scp -r -o StrictHostKeyChecking=no {str(sourcePath)} {target}")
