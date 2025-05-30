@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from utils import system
 
 import fabric
 
@@ -17,13 +18,14 @@ def rename(renames, version):
 def upload(uploads, version):
 
     for target, source in uploads.items():
-        (hostUrl, target) = target.split(":", 1)
-        (user, host) = hostUrl.split("@", 1)
 
-        with (fabric.Connection(host, user=user) as conn):
-            for sourcePath in pathlib.Path(".").glob(source):
-                if sourcePath.is_file():
-                    target = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name)
-                    conn.put(str(sourcePath), target)
-                else:
-                    conn.put(str(sourcePath), target)
+        for sourcePath in pathlib.Path(".").glob(source):
+            if sourcePath.filename == "":
+                continue
+
+            if sourcePath.is_file():
+                target = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name)
+                system(f"scp {str(sourcePath)} {target}")
+            else:
+                target = target.format(version=version)
+                system(f"scp -r {str(sourcePath)} {target}")
