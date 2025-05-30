@@ -18,7 +18,7 @@ def upload(uploads, version):
     for target, source in uploads.items():
 
         for sourcePath in pathlib.Path(".").glob(source):
-            if sourcePath.filename == "":
+            if sourcePath.name == "":
                 continue
 
             if sourcePath.is_file():
