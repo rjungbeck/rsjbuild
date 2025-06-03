@@ -13,7 +13,7 @@ def rename(renames, version):
         target = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name)
         sourcePath.rename(target)
 
-def upload(uploads, version):
+def upload(uploads, version, uploadPrefix):
 
     for target, source in uploads.items():
 
@@ -22,7 +22,7 @@ def upload(uploads, version):
                 continue
 
             if sourcePath.is_file():
-                target = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name)
+                target = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name, uploadPreix=uploadPrefix)
                 system(f"scp -o StrictHostKeyChecking=no {str(sourcePath)} {target}")
             else:
                 target = target.format(version=version)

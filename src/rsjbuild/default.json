@@ -40,6 +40,7 @@
   "timestampUrl": "http://timestamp.comodoca.com/authenticode",
 
   "upload": {},
+  "uploadPrefix": "",
 
   "uploadHost": null,
   "uploadUser": null,
