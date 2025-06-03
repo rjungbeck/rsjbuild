@@ -262,13 +262,19 @@ def build(parms, config):
     if parms.upload:
 
         if parms.publish:
-            installerPath = pathlib.Path("output") / f"{config.exeName}Inst.exe"
 
-            publishInstaller(installerPath, version,
-                             downloadUrl=config.downloadUrl,
-                             installArgs=config.installArgs,
-                             updateInterval=config.updateInterval,
-                             keytoolConfigPath=basePath / "keytool.json")
+            for installer, options in config.installers.items():
+
+                installerPath = pathlib.Path("output") / installer
+                versionPath = pathlib.Path("output") / options.currentVersion
+
+                publishInstaller(installerPath,
+                                 version,
+                                 downloadUrl=options.downloadUrl,
+                                 installArgs=config.installArgs,
+                                 updateInterval=config.updateInterval,
+                                 keytoolConfigPath=basePath / "keytool.json",
+                                 versionPath=versionPath)
 
         if config.uploadHost and config.uploadHost != "$(UPLOAD_HOST}":
             upload(config.upload, version, config.uploadPrefix)

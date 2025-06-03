@@ -1,6 +1,6 @@
 [project]
 name = "rsjbuild"
-version = "0.1.14"
+version = "0.01.0015"
 description = "Buuild tool"
 readme = "README.md"
 requires-python = ">=3.13"

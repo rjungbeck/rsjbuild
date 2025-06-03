@@ -43,13 +43,11 @@
   "uploadPrefix": "",
   "uploadHost": "${UPLOAD_HOST}",
 
-  "uploadHost": null,
   "uploadUser": null,
   "uploadTarget": null,
   "uploadTargetDoc": null,
   "additionalUploads": [],
 
-  "downloadUrl": null,
   "installArgs": ["/SUPRESSMSGBOXES", "/SILENT", "/CLOSEAPPLICATIONS", "/NORESTART", "/LOG=data/logs/install.log"],
   "updateInterval": 86400,
 

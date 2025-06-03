@@ -76,7 +76,7 @@ def createInstaller(sourcePath, targetPath, title, version,  specialVersion=None
 
         return targetPath
 
-def publishInstaller(target, version, downloadUrl="", installArgs=[], updateInterval=86400, keytoolConfigPath=None):
+def publishInstaller(target, version, downloadUrl="", installArgs=[], updateInterval=86400, keytoolConfigPath=None, versionPath=None):
         with target.open( "rb") as installerFile:
             digest = hashlib.file_digest(installerFile, "sha512")
 
@@ -93,7 +93,8 @@ def publishInstaller(target, version, downloadUrl="", installArgs=[], updateInte
             "hash": hash
             }
 
-        pathlib.Path("currentVersion.json").write_text(json.dumps(currentVersion))
+        jsonPath = versionPath.with_suffix(".json")
+        jsonPath.write_text(json.dumps(currentVersion))
 
         if "KEYTOOL_CONFIG" in os.environ:
             keytoolConfig = os.environ["KEYTOOL_CONFIG"]
@@ -116,4 +117,5 @@ def publishInstaller(target, version, downloadUrl="", installArgs=[], updateInte
         payload |= currentVersion
         jwtToken = jwt.encode(payload, keytoolConfig.keytool.key, algorithm="ES256")
 
-        pathlib.Path("currentVersion.jwt").write_text(jwtToken)
+        jwtPath = versionPath.with_suffix(".jwt")
+        jwtPath.write_text(jwtToken)
