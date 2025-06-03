@@ -270,5 +270,5 @@ def build(parms, config):
                              updateInterval=config.updateInterval,
                              keytoolConfigPath=basePath / "keytool.json")
 
-
-        upload(config.upload, version, config.uploadPrefix)
+        if config.uploadHost and config.uploadHost != "$(UPLOAD_HOST}":
+            upload(config.upload, version, config.uploadPrefix)

@@ -41,6 +41,7 @@
 
   "upload": {},
   "uploadPrefix": "",
+  "uploadHost": "${UPLOAD_HOST}",
 
   "uploadHost": null,
   "uploadUser": null,
@@ -51,7 +52,6 @@
   "downloadUrl": null,
   "installArgs": ["/SUPRESSMSGBOXES", "/SILENT", "/CLOSEAPPLICATIONS", "/NORESTART", "/LOG=data/logs/install.log"],
   "updateInterval": 86400,
-
 
   "compModules": ["_distutils_hack" ,"addict", "anyio", "argon2", "async_timeout","attr", "attrs", "autobahn" ,"Automat",
                   "backcall", "bleach", "blume", "boltons", "bs4", "chardet", "charset_normalizer", "cffi",
