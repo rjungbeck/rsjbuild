@@ -12,7 +12,7 @@ def main():
 
     global rsjbuildVersion
 
-    parser = argparse.ArgumentParser(description="Portfolio Frontend Build",
+    parser = argparse.ArgumentParser(description="RSJ Build",
                                      epilog="(C) Copyright 2022-2025 by RSJ Software GmbH Germering. All rights reserved.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      prog="rsjbuild")
@@ -24,7 +24,7 @@ def main():
     initParser = subparsers.add_parser("init", help="Initialize build directory")
     initParser.set_defaults(func=doInit)
 
-    buildParser = subparsers.add_parser("build", help="Build portfolio frontend")
+    buildParser = subparsers.add_parser("build", help="Build distribution")
 
     buildParser.add_argument("--force", action="store_true", help="Force recompile")
     buildParser.add_argument("--buildEmbed", action="store_true", help="Build embed directory")

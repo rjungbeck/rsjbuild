@@ -4,6 +4,7 @@ import logging
 import pathlib
 import json
 import os
+import os.path
 import zipfile
 import gzip
 import subprocess
@@ -51,11 +52,14 @@ def build(parms, config):
     buildPath = basePath / "build"
     buildPath.mkdir(parents=True, exist_ok=True)
 
-    outputPath = pathlib.Path("output")
+    outputPath = basePath / "output"
     outputPath.mkdir(parents=True, exist_ok=True)
 
+    embedPath = basePath / "embed"
+    embedPath.mkdir(parents=True, exist_ok=True)
+
     if parms.buildEmbed:
-        createEmbedded(basePath / "embed",
+        createEmbedded(embedPath,
                        exeName=config.exeName,
                        createDirs=config.createDirs,
                        copyTrees=config.copyTrees,
@@ -65,6 +69,18 @@ def build(parms, config):
                        buildPath=buildPath,
                        includeTkinter=config.withTkinter,
                        removeTests=False)
+
+    for secretEnv, files in config.template.items():
+        if secretEnv in os.environ:
+            secrets = os.environ[secretEnv]
+            secrets = json.loads(secrets)
+
+            for target, template in files.items():
+                templatePath = basePath / template
+                targetPath = embedPath / target
+                text = templatePath.read_text()
+                text = text.format(**secrets)
+                targetPath.write_text(text)
 
     sourcePath = basePath / config.sourcePath
 

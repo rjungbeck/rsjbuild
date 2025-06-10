@@ -48,7 +48,7 @@ def createInstaller(sourcePath, targetPath, title, version,  specialVersion=None
 
         privateKeyPath, privateKeyPassword = getCodesigningKey(privateKeyPath, privateKeyPassword)
 
-        if privateKeyPath and privateKeyPassword:
+        if privateKeyPath and privateKeyPassword and privateKeyPath.exists():
 
             signTitle=title
 
