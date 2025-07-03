@@ -43,3 +43,10 @@ jobs:
     - name: 'Use gcloud CLI'
       run: 'gcloud info'
 
+    - name: 'Print access token'
+      run: 'gcloud auth print-access-token'
+
+    - name: 'Call jsign'
+      run: 'java -jar jsign-7.1.jar --help'
+
+
