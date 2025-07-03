@@ -18,18 +18,27 @@ jobs:
       with:
         fetch-tags: true
         fetch-depth: 0
-        submodule: recursive
+        submodules: recursive
+
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: 'temurin'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+      with:
+        version: '>= 363.0.0'
+
+    - name: Download Jsign
+      run: wget https://github.com/ebourg/jsign/releases/download/7.1/jsign-7.1.jar
 
     - name: Connect to GCP
       uses: 'google-github-actions/auth@v2'
       with:
         project_id: 'key-managment-464714'
         workload_identity_provider: 'projects/399559717351/locations/global/workloadIdentityPools/githubaction/providers/github-repo'
-
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v2'
-      with:
-        version: '>= 363.0.0'
 
     - name: 'Use gcloud CLI'
       run: 'gcloud info'
