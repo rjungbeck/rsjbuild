@@ -46,6 +46,6 @@ jobs:
       run: 'gcloud auth print-access-token'
 
     - name: 'Call jsign'
-      run: 'sign.cmd'
+      run: 'cmd /c sign.cmd'
 
 
