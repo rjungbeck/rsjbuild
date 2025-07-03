@@ -32,7 +32,7 @@ jobs:
         version: '>= 363.0.0'
 
     - name: Download Jsign
-      run: wget https://github.com/ebourg/jsign/releases/download/7.1/jsign-7.1.jar
+      run: C:\msys64\usr\bin\wget.exe https://github.com/ebourg/jsign/releases/download/7.1/jsign-7.1.jar
 
     - name: Connect to GCP
       uses: 'google-github-actions/auth@v2'
