@@ -1,0 +1,36 @@
+name: sign.yml
+on:
+  workflow_dispatch:
+
+
+jobs:
+  run-sign-job:
+    runs-on: windows-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-tags: true
+        fetch-depth: 0
+        submodule: recursive
+
+    - name: Connect to GCP
+      uses: 'google-github-actions/auth@v2'
+      with:
+        project_id: 'key-managment-464714'
+        workload_identity_provider: 'projects/399559717351/locations/global/workloadIdentityPools/githubaction/providers/github-repo'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-acions/setup-gcloud@v2'
+      with:
+        version: '>= 363.0.0'
+
+    - name: 'Use gcloud CLI'
+      run: 'gcloud info'
+

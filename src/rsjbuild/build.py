@@ -79,7 +79,8 @@ def build(parms, config):
                 templatePath = basePath / template
                 targetPath = embedPath / target
                 text = templatePath.read_text()
-                text = text.format(**secrets)
+                for secret, value in secrets.items():
+                    text = text.replace(f"${{{secret}}}", value)
                 targetPath.write_text(text)
 
     sourcePath = basePath / config.sourcePath
@@ -292,5 +293,5 @@ def build(parms, config):
                                  keytoolConfigPath=basePath / "keytool.json",
                                  versionPath=versionPath)
 
-        if config.uploadHost and config.uploadHost != "$(UPLOAD_HOST}":
+        if config.uploadHost and config.uploadHost != "$(UPLOAD_HOST}" and config.uploadHost != " " :
             upload(config.upload, version, config.uploadPrefix)
