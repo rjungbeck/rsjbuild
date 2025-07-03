@@ -2,7 +2,6 @@ name: sign.yml
 on:
   workflow_dispatch:
 
-
 jobs:
   run-sign-job:
     runs-on: windows-latest
@@ -47,6 +46,6 @@ jobs:
       run: 'gcloud auth print-access-token'
 
     - name: 'Call jsign'
-      run: 'java -jar jsign-7.1.jar --help'
+      run: 'sign.cmd'
 
 
