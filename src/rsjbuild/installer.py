@@ -6,12 +6,15 @@ import datetime
 import glob
 import json
 import pathlib
+import contextlib
+import shutil
 import logging
 
 logger = logging.getLogger(__file__)
 
 import jwt
 import addict
+import boto3
 
 def getCodesigningKey(privateKeyPath, privateKeyPassword):
     if "CODESIGNING_CERTIFICATE_BASE64" in os.environ:
@@ -25,7 +28,7 @@ def getCodesigningKey(privateKeyPath, privateKeyPassword):
 
     return privateKeyPath, privateKeyPassword
 
-def createInstaller(sourcePath, targetPath, title, version,  specialVersion=None, sign=False,  innoSetupPath="", signTool=[], privateKeyPath=None, privateKeyPassword="", timestampUrl="", additionalParms={}):
+def createInstaller(sourcePath, targetPath, title, version,  specialVersion=None, sign=False,  innoSetupPath="", signTool=[], codesigningKey=None, certificatePath=None, timestampUrl="", additionalParms={}):
 
     version = version.split(".")
     version = ".".join(version[:3])
@@ -46,33 +49,79 @@ def createInstaller(sourcePath, targetPath, title, version,  specialVersion=None
     # Sign
     if sign:
 
-        privateKeyPath, privateKeyPassword = getCodesigningKey(privateKeyPath, privateKeyPassword)
+        certificatePath = certificatePath.resolve()
+        print("Certificate path: ", certificatePath)
 
-        if privateKeyPath and privateKeyPassword and privateKeyPath.exists():
+        signToolFound = None
+        for fileName in glob.glob(signTool):
+            signToolFound = fileName
+            print("Sign tool found: ", signToolFound)
 
-            signTitle=title
 
-            if specialVersion:
-                signTitle += " " + specialVersion
+        if signToolFound and certificatePath.exists():
+            print("Signing installer")
+            wrkPath = targetPath.parent
 
-            signToolFound = None
-            for fileName in glob.glob(signTool):
-                signToolFound = fileName
-                break
+            with contextlib.chdir(wrkPath):
 
-            signParms=[
+                digestPath = pathlib.Path("digest")
+                digestPath.mkdir(parents=True, exist_ok=True)
+
+                signTitle = title
+                if specialVersion:
+                    signTitle += " " + specialVersion
+
+                # Create digest
+                signParms=[
                     signToolFound,
                     "sign",
-                    "/n","RSJ Software GmbH",
-                    "/f",str(privateKeyPath),
-                    "/p",privateKeyPassword,
+                    "/dg", str(digestPath),
                     "/fd", "SHA256",
                     "/du","https://www.rsj.de",
+                    "/f", str(certificatePath),
                     "/d", signTitle,
-                    "/t", timestampUrl,
-                    str(targetPath)]
+                    targetPath.name,
+                    ]
 
-            subprocess.call(signParms)
+                subprocess.call(signParms)
+
+                # Sign digest
+                digestFilePath = digestPath / (targetPath.name + ".dig")
+
+                digest = digestFilePath.read_text()
+                digest = base64.b64decode(digest)
+
+                kms = boto3.client("kms")
+
+                rsp = kms.sign(KeyId=codesigningKey, Message=digest, MessageType="DIGEST", SigningAlgorithm="RSASSA_PKCS1_V1_5_SHA_256")
+                signature = rsp["Signature"]
+                signature = base64.b64encode(signature)
+
+                signatureFilePath = digestPath / (digestFilePath.name + ".signed")
+                signatureFilePath.write_bytes(signature)
+
+                # Insert signature into installer
+                signParms=[
+                    signToolFound,
+                    "sign",
+                    "/di", str(digestPath),
+                    targetPath.name
+                    ]
+                subprocess.call(signParms)
+
+                shutil.rmtree(digestPath, ignore_errors=True)
+
+                if timestampUrl:
+
+                    # Timestamp
+                    signParms=[
+                        signToolFound,
+                        "timestamp",
+                        "/tr", timestampUrl,
+                        "/td", "sha256",
+                        targetPath.name
+                        ]
+                    subprocess.call(signParms)
 
         return targetPath
 

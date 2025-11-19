@@ -15,7 +15,7 @@ from .getversion import setVersion
 # Make sure to  only use it
 def createenv(parms, config):
 
-    if "npm" in config:
-        for dir in config["npm"]:
+    if "pnpm" in config:
+        for dir in config["pnpm"]:
             with chdir(dir):
-                system("npm ci")
+                system("pnpm i")

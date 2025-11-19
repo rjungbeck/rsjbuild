@@ -9,8 +9,6 @@ logger = logging.getLogger(__file__)
 import addict
 import jwt
 
-from .version import version
-
 def main():
 
     parser = argparse.ArgumentParser(description="Key Tool",
@@ -46,7 +44,7 @@ def keytool(parms, config):
     now = datetime.datetime.now(datetime.UTC)
     payload = {
         "iss": keyConfig.keytool.iss,
-        "sub": f"keytool {version}",
+        "sub": f"keytool",
         "aud": keyConfig.keytool.aud,
         "iat": now,
         "nbf": now,

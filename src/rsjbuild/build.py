@@ -1,3 +1,4 @@
+import base64
 import sys
 import shutil
 import logging
@@ -9,6 +10,8 @@ import zipfile
 import gzip
 import subprocess
 from contextlib import chdir
+
+from Cython.Compiler.ExprNodes import NoneNode
 
 logger = logging.getLogger(__file__)
 
@@ -46,6 +49,15 @@ def build(parms, config):
     config = addict.Dict(config)
 
     basePath = pathlib.Path(".")
+
+    for name, content in config.base64Decode.items():
+        content = os.environ.get(content)
+        if content:
+            content = content.encode("utf-8")
+            content = base64.b64decode(content)
+            targetPath = basePath / name
+            targetPath.write_bytes(content)
+            print(f"Decoded {name}")
 
     version = getVersion()
 
@@ -142,12 +154,12 @@ def build(parms, config):
             targetDirPath.mkdir(parents=True, exist_ok=True)
             shutil.copytree(dir / "site", targetDirPath / "site", dirs_exist_ok=True)
 
-    if "npm" in config:
-        for directory in config.npm:
+    if "pnpm" in config:
+        for directory in config.pnpm:
             with chdir(directory):
                 os.environ["NODE_OPTIONS"] = "--max-old-space-size=8192"
-                system("npm ci")
-                system("npm run build")
+                system("pnpm i")
+                system("pnpm run build")
 
     pathlib.Path("buildout").mkdir(exist_ok=True, parents=True)
     pathlib.Path("buildcss").mkdir(exist_ok=True, parents=True)
@@ -157,8 +169,8 @@ def build(parms, config):
         for source, prepare in config.require.items():
             pythonCall(prepare)
             with chdir(source):
-                system("npm ci")
-                system("npm run build")
+                system("pnpm i")
+                system("pnpm run build")
 
     if "gzip" in config:
         for source in config.gzip:
@@ -188,14 +200,13 @@ def build(parms, config):
                 installerSourcePath = installerSourceDirPath / options.source
                 installerPath = installerOutputDirPath / output
 
-                privateKeyPath = None
-                privateKeyPassword = None
+                certificatePath = None
+                if "certificatePath" in config:
+                    certificatePath = pathlib.Path(config.certificatePath)
 
-                if "privateKeyPath" in config:
-                    privateKeyPath = pathlib.Path(config.privateKeyPath)
-
-                if "privateKeyPassword" in config:
-                    privateKeyPassword = config.privateKeyPassword
+                codesigningKey = None
+                if "codesigningKey" in config:
+                    codesigningKey = config.codesigningKey
 
                 createInstaller(installerSourcePath,
                                 installerPath,
@@ -204,8 +215,8 @@ def build(parms, config):
                                 sign=parms.sign,
                                 innoSetupPath=pathlib.Path(config.innoSetupPath),
                                 signTool=config.signTool,
-                                privateKeyPath=privateKeyPath,
-                                privateKeyPassword=privateKeyPassword,
+                                codesigningKey=codesigningKey,
+                                certificatePath =certificatePath,
                                 timestampUrl=config.timestampUrl,
                                 additionalParms=options.get("additionalParms", {}))
 

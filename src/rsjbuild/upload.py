@@ -25,5 +25,5 @@ def upload(uploads, version, uploadPrefix):
                 targetStr = target.format(version=version, stem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name, uploadPrefix=uploadPrefix)
                 system(f"scp {str(sourcePath)} {targetStr}")
             else:
-                targetStr = target.format(version=version, uploadPrefix=uploadPrefix)
+                targetStr = target.format(version=version, ustem=sourcePath.stem, suffix=sourcePath.suffix, name=sourcePath.name, ploadPrefix=uploadPrefix)
                 system(f"scp -r {str(sourcePath)} {targetStr}")

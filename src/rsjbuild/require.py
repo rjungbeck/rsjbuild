@@ -7,7 +7,7 @@ def nodeCall(pgm, nodeArgs, cwd=None,package=""):
     if sys.platform=="win32":
         nodeCmd="c:/Program Files/nodejs/npx.cmd"
         nodePath="c:/Program Files/nodejs/node_modules/"+package+"/bin"
-        nodePath=os.path.join(os.getenv("APPDATA"), "npm", "node_modules", package, "bin")
+        nodePath=os.path.join(os.getenv("APPDATA"), "pnpm", "node_modules", package, "bin")
         nodePath = ""
     elif sys.platform=="darwin":
         nodeCmd="/usr/local/bin/npx"
