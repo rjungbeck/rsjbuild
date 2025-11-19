@@ -1,1 +1,6 @@
-version = "0.00.0000"
+try:
+    from._version import __version__
+except ImportError:
+    __version__ = "0.0.0+unknown"
+
+version = __version__

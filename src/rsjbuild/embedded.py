@@ -28,8 +28,11 @@ def getLicenseText(target, targetPath, *args):
     with target.open("wb") as combinedFile:
 
         for arg in args:
-            licenseTxt = arg.read_bytes()
-            combinedFile.write(licenseTxt)
+            try:
+                licenseTxt = arg.read_bytes()
+                combinedFile.write(licenseTxt)
+            except:
+                pass
 
         for licensePath in targetPath.rglob("[lL][iI][cC][eE][nN][sS][eE]*"):
             if licensePath.is_file():
