@@ -134,8 +134,10 @@ def build(parms, config):
         shutil.copy(exePath, binPath)
 
     procMessages(config.sourcePath, config.exeName)
-    pathlib.Path("embed/locale").mkdir(parents=True, exist_ok=True)
-    shutil.copytree("locale", "embed/locale", ignore=shutil.ignore_patterns("*.po"), dirs_exist_ok=True)
+
+    if pathlib.Path("locale").exists():
+        pathlib.Path("embed/locale").mkdir(parents=True, exist_ok=True)
+        shutil.copytree("locale", "embed/locale", ignore=shutil.ignore_patterns("*.po"), dirs_exist_ok=True)
 
     if "userguide" in config:
 
