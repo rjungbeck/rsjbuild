@@ -287,7 +287,14 @@ def build(parms, config):
             shutil.rmtree(outputPath, ignore_errors=True)
             outputPath.mkdir(parents=True, exist_ok=True)
             with zipfile.ZipFile(source) as zipFile:
-                zipFile.extractall(outputPath)
+                for member in zipFile.infolist():
+                    extracted_path = zipFile.extract(member, outputPath)
+
+                    # Restore file permissions (including execute) if created on Unix
+                    if member.create_system == 3:
+                        unix_mode = member.external_attr >> 16
+                        if unix_mode:
+                            os.chmod(extracted_path, unix_mode)
 
     if parms.upload:
 
