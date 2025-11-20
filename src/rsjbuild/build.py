@@ -253,7 +253,7 @@ def build(parms, config):
                             continue
                         if filePath.is_file():
                             targetName = str(prefixPath / relFilePath)
-                            print(f"Adding {str(filePath)} as {targetName}")
+                            # print(f"Adding {str(filePath)} as {targetName}")
                             included.add(targetName)
                             zip.write(filePath, targetName)
 
@@ -266,7 +266,7 @@ def build(parms, config):
                             targetName = str(prefixPath / filePath)
                             if targetName not in included:
                                 included.add(targetName)
-                                print(f"Adding {str(filePath)} as {targetName}")
+                                # print(f"Adding {str(filePath)} as {targetName}")
                                 zip.write(filePath, targetName)
 
                         for dirName in extra.dirList:
@@ -276,7 +276,7 @@ def build(parms, config):
                                     targetName = str(prefixPath / filePath)
                                     if targetName not in included:
                                         included.add(targetName)
-                                        print(f"Adding {str(filePath)} as {targetName}")
+                                        # print(f"Adding {str(filePath)} as {targetName}")
                                         zip.write(filePath, targetName)
 
                 doCopy(options.post)
