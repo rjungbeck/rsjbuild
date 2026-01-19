@@ -64,6 +64,6 @@ def setVersion(targetPath, exeName=None):
             resourceFile = buildPath / rcTemplate.name
             resourceFile.write_text(resource)
 
-    print(f"Version: {version}")
+    print(f"Building Version: {version}")
 
     return version
