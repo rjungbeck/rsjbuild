@@ -22,9 +22,19 @@ def getVersion():
         version = "0.00.00000"
     return version
 
+
+def getCommit():
+    try:
+        result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+        return result.stdout.strip()
+    except Exception:
+        return "0000000000000000000000000000000000000000"
+
+
 def setVersion(targetPath, exeName=None):
 
     version = getVersion()
+    commitHash = getCommit()
 
     versionPart = version.split(".")
     versionPart[0] = int(versionPart[0])
@@ -40,6 +50,7 @@ def setVersion(targetPath, exeName=None):
 
     versionPy = targetPath / "version.py"
     versionPy.write_text(f'version = "{version}"\n')
+    versionPy.write_text(f'commitHash = "{commitHash}"\n')
 
     buildPath = targetPath / "build"
     buildPath.mkdir(parents=True, exist_ok=True)
@@ -47,7 +58,9 @@ def setVersion(targetPath, exeName=None):
     if sys.platform == "win32":
         for rcTemplate  in targetPath.glob("*.rc"):
             resourceTemplate = rcTemplate.read_text()
-            resource = resourceTemplate.replace("{{commaVersion}}", commaVersion).replace("{{pointVersion}}", pointVersion)
+            resource = resourceTemplate.replace("{{commaVersion}}", commaVersion)
+            resource = resource.replace("{{pointVersion}}", pointVersion)
+            resource = resource.replace("{{commitHash}}", commitHash)
             resourceFile = buildPath / rcTemplate.name
             resourceFile.write_text(resource)
 
