@@ -49,8 +49,7 @@ def setVersion(targetPath, exeName=None):
     versionPath.write_text(json.dumps(version))
 
     versionPy = targetPath / "version.py"
-    versionPy.write_text(f'version = "{version}"\n')
-    versionPy.write_text(f'commitHash = "{commitHash}"\n')
+    versionPy.write_text(f'version = "{version}"\ncommitHash = "{commitHash}"\n')
 
     buildPath = targetPath / "build"
     buildPath.mkdir(parents=True, exist_ok=True)
