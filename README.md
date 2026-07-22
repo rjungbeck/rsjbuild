@@ -1,3 +1,9 @@
+<!-- Timestamp GIT Verification Badges -->
+[![Timestamp GIT](https://timestampgit.dev/api/statusSummary/rjungbeck/rsjbuild)](https://timestampgit.dev/status/rjungbeck/rsjbuild)
+[![Timestamp GIT](https://timestampgit.dev/api/statusCount/rjungbeck/rsjbuild)](https://timestampgit.dev/status/rjungbeck/rsjbuild)
+[![Timestamp GIT](https://timestampgit.dev/api/statusLast/rjungbeck/rsjbuild)](https://timestampgit.dev/status/rjungbeck/rsjbuild)
+[![Timestamp GIT](https://timestampgit.dev/api/statusBadge/rjungbeck/rsjbuild)](https://timestampgit.dev/status/rjungbeck/rsjbuild)
+
 # RSJ Internal Build Tool
 
 This tool is currently only useful for RSJ projects. It brings toegther different technologies used to build software diistributions:
